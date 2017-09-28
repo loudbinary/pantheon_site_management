@@ -19,6 +19,18 @@ function site(details){
     return key;
 }
 Db = {
+    get: {
+        /**
+         *
+         * @returns {*|{src}|Promise.<*>}
+         */
+        sites: function(){
+            let Site = new DB.Collection('sites');
+            let all = Site.all();
+            App.utils.log.msg(['Loaded',all.length,'sites from CWB/DB/ File Database']);
+            return all;
+        }
+    },
     add: {
         /**
          * Add site JSON to File Db Storage @ dbPath

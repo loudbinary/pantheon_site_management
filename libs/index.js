@@ -34,5 +34,6 @@ App = {
 App.SiteManagement = require('./site_management');
 App.Pantheon = require('./pantheon.js');
 App.Db = require('./db.js');
+App.ArgumentsProcessor = require('./arguments_processor');
 
 module.exports = App;

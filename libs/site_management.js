@@ -2,7 +2,8 @@ let app = require('./index');
 const _ = require('lodash');
 
 SiteManagement = {
-    scanForPatches: scanForPatches
+    scanForPatches: scanForPatches,
+    createMultidevs: createMultidevs
 }
 /**
  * Scan for patches, and fills global App.Pantheon.sites object
@@ -48,6 +49,23 @@ function scanForPatches(refresh){
 
 }
 
+/** Creates patching multidev for given site array, or if not provided all sites in database */
+function createMultidevs(multidevName) {
+    _.each(App.Pantheon.sites.all,(site)=>{
+         let mdExists = App.Pantheon.sites.checkMultidevExists(site,multidevName);
+         if (mdExists===false){
+             App.Pantheon.sites.createMultidev(site,multidevName);
+         } else {
+             App.utils.log.msg(['Unable to create multidev patching, because it already exists'])
+         }
+
+    })
+}
+
+function createMultidev(site,multidevName){
+    App.utils.log.msg(['Building new multidev',multidevName,'for site',site.name]);
+    let results = exec.sync('terminus',[''])
+}
 /**
  * Generalized methods and functions for management of Pantheon sites.
  * @type {SiteManagement}

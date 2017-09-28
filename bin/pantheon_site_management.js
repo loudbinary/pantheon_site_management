@@ -2,6 +2,6 @@
 const app = require('../libs/index');
 
 /**
- * Main entry for Pantheon patch scan, fills Global Object App.Pantheon.sites.all with results
+ * Main entry for Utility
  */
-app.SiteManagement.scanForPatches();
+app.ArgumentsProcessor.process();

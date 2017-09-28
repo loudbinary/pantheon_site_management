@@ -20,6 +20,9 @@
 <dt><a href="#checkUpstream">checkUpstream(site)</a> ⇒ <code>String</code></dt>
 <dd><p>For given site queries Pantheon synchronously and return results of terminus upstream:updates:status</p>
 </dd>
+<dt><a href="#multidevExists">multidevExists(site, multidevName)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Queries Pantheon Site to see if a multidev exists by same name</p>
+</dd>
 <dt><a href="#fillUpstreamUpdates">fillUpstreamUpdates()</a></dt>
 <dd><p>For given site, queries Pantheon site synchronously and results of terminus upstream:updates:list and apply to upstreamUpdates array</p>
 </dd>
@@ -28,6 +31,9 @@
 </dd>
 <dt><a href="#scanForPatches">scanForPatches(refresh)</a></dt>
 <dd><p>Scan for patches, and fills global App.Pantheon.sites object</p>
+</dd>
+<dt><a href="#createMultidevs">createMultidevs()</a></dt>
+<dd><p>Creates patching multidev for given site array, or if not provided all sites in database</p>
 </dd>
 </dl>
 
@@ -120,6 +126,19 @@ For given site queries Pantheon synchronously and return results of terminus ups
 | --- | --- | --- |
 | site | <code>Array</code> | Pantheon site data and details. |
 
+<a name="multidevExists"></a>
+
+## multidevExists(site, multidevName) ⇒ <code>boolean</code>
+Queries Pantheon Site to see if a multidev exists by same name
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - Returns true if multidev exists, otherwise false.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| site | <code>Object</code> | Details from Pantheon Query for a site. |
+| multidevName | <code>String</code> | Multidev environment to check existence for within Pantheon site |
+
 <a name="fillUpstreamUpdates"></a>
 
 ## fillUpstreamUpdates()
@@ -148,3 +167,9 @@ Scan for patches, and fills global App.Pantheon.sites object
 | --- | --- | --- |
 | refresh | <code>Boolean</code> | If true, forces new Array on App.Pantheon.sites to refresh data. |
 
+<a name="createMultidevs"></a>
+
+## createMultidevs()
+Creates patching multidev for given site array, or if not provided all sites in database
+
+**Kind**: global function  

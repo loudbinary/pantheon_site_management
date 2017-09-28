@@ -13,7 +13,10 @@ Pantheon = {
      */
     sites: {
         base: this,
-        all: []
+        all: [],
+        checkMultidevExists: function(site,multidevName){
+            return multidevExists(site,multidevName);
+        }
     }
 }
 
@@ -22,6 +25,16 @@ Pantheon = {
  * @returns {Array}
  */
 Pantheon.sites.list = function(){
+    if (this.all.length === 0 && App.ArgumentsProcessor.args.loadFileDb) {
+        App.utils.log.msg(['Loading sites from CWD/DB File storage']);
+        App.Pantheon.sites.all = App.Db.get.sites();
+    }
+    else {
+        fillSites()
+            .then(()=>{
+                App.utils.log.msg(['Finished querying all Pantheon sites for details']);
+            })
+    }
     return this.all;
 }
 
@@ -31,18 +44,29 @@ Pantheon.sites.list = function(){
 Pantheon.sites.fill = function(){
     return new Promise((resolve)=>{
         ensureSetup();
-        fillSites()
-            .then((sites)=>{
-                let _sites = JSON.parse(sites);
-                let results = _.forEach(_sites,(site)=>{
-                   site.upstreamOutdated = '';
-                   site.upstreamUpdates = new Array;
-                   App.Pantheon.sites.all.push(site);
+        if (_.isNil(App.ArgumentsProcessor.args.loadFileDb)){
+            fillSites()
+                .then((sites)=>{
+                    let _sites = JSON.parse(sites);
+                    let results = _.forEach(_sites,(site)=>{
+                        site.upstreamOutdated = '';
+                        site.upstreamUpdates = new Array;
+                        App.Pantheon.sites.all.push(site);
+                    })
+                    resolve(null);
                 })
-                resolve(null);
-            })
+        }
+        else {
+            App.Pantheon.sites.all = App.Db.get.sites();
+        }
         })
+}
 
+Pantheon.sites.createMultidev = function(site,multidevName){
+    return new Promise((resolve)=>{
+        let results = createMultidev(site,multidevName);
+        resolve(results);
+    })
 }
 
 /**
@@ -117,7 +141,6 @@ function fillSites(){
             }
         });
     })
-
 }
 
 /**
@@ -135,6 +158,25 @@ function checkUpstream(site){
         App.utils.log.msg([' - UP_TO_DATE']);
     }
     return results;
+}
+
+/**
+ * Queries Pantheon Site to see if a multidev exists by same name
+ * @param site {Object} Details from Pantheon Query for a site.
+ * @param multidevName {String} Multidev environment to check existence for within Pantheon site
+ * @returns {boolean} Returns true if multidev exists, otherwise false.
+ */
+function multidevExists(site,multidevName) {
+    App.utils.log.msg(['Verifying multidev',multidevName,'does not exist for site', site.name]);
+    var results = exec.sync('terminus',['multidev:list',site.name,'--field=Name','--format=json']).stdout.split('\n');
+    let exists = _.filter(results,(item)=>{
+        return item == multidevName;
+    })
+    if (exists.length === 1 && exists[0] === multidevName){
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /** For given site, queries Pantheon site synchronously and results of terminus upstream:updates:list and apply to upstreamUpdates array */
@@ -162,6 +204,13 @@ function writeSiteToDb(site){
         App.utils.log.msg([' FAILURE'], false,error);
     }
 }
+
+function createMultidev(site,multidevName) {
+    App.utils.log.msg(['Creating new multidev', multidevName,'for site',site.name]);
+    let results = exec.sync('terminus',['multidev:create',site.name,multidevName]).stdout
+    return results;
+}
+
 /**
  * Generalized methods for private utility use.
  * @type {Pantheon}

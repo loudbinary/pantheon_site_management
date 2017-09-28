@@ -41,7 +41,10 @@ Pantheon = {
      */
     sites: {
         base: this,
-        all: []
+        all: [],
+        checkMultidevExists: function(site,multidevName){
+            return multidevExists(site,multidevName);
+        }
     }
 }
 
@@ -50,6 +53,16 @@ Pantheon = {
  * @returns {Array}
  */
 Pantheon.sites.list = function(){
+    if (this.all.length === 0 &amp;&amp; App.ArgumentsProcessor.args.loadFileDb) {
+        App.utils.log.msg(['Loading sites from CWD/DB File storage']);
+        App.Pantheon.sites.all = App.Db.get.sites();
+    }
+    else {
+        fillSites()
+            .then(()=>{
+                App.utils.log.msg(['Finished querying all Pantheon sites for details']);
+            })
+    }
     return this.all;
 }
 
@@ -59,18 +72,29 @@ Pantheon.sites.list = function(){
 Pantheon.sites.fill = function(){
     return new Promise((resolve)=>{
         ensureSetup();
-        fillSites()
-            .then((sites)=>{
-                let _sites = JSON.parse(sites);
-                let results = _.forEach(_sites,(site)=>{
-                   site.upstreamOutdated = '';
-                   site.upstreamUpdates = new Array;
-                   App.Pantheon.sites.all.push(site);
+        if (_.isNil(App.ArgumentsProcessor.args.loadFileDb)){
+            fillSites()
+                .then((sites)=>{
+                    let _sites = JSON.parse(sites);
+                    let results = _.forEach(_sites,(site)=>{
+                        site.upstreamOutdated = '';
+                        site.upstreamUpdates = new Array;
+                        App.Pantheon.sites.all.push(site);
+                    })
+                    resolve(null);
                 })
-                resolve(null);
-            })
+        }
+        else {
+            App.Pantheon.sites.all = App.Db.get.sites();
+        }
         })
+}
 
+Pantheon.sites.createMultidev = function(site,multidevName){
+    return new Promise((resolve)=>{
+        let results = createMultidev(site,multidevName);
+        resolve(results);
+    })
 }
 
 /**
@@ -145,7 +169,6 @@ function fillSites(){
             }
         });
     })
-
 }
 
 /**
@@ -165,6 +188,25 @@ function checkUpstream(site){
     return results;
 }
 
+/**
+ * Queries Pantheon Site to see if a multidev exists by same name
+ * @param site {Object} Details from Pantheon Query for a site.
+ * @param multidevName {String} Multidev environment to check existence for within Pantheon site
+ * @returns {boolean} Returns true if multidev exists, otherwise false.
+ */
+function multidevExists(site,multidevName) {
+    App.utils.log.msg(['Verifying multidev',multidevName,'does not exist for site', site.name]);
+    var results = exec.sync('terminus',['multidev:list',site.name,'--field=Name','--format=json']).stdout.split('\n');
+    let exists = _.filter(results,(item)=>{
+        return item == multidevName;
+    })
+    if (exists.length === 1 &amp;&amp; exists[0] === multidevName){
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /** For given site, queries Pantheon site synchronously and results of terminus upstream:updates:list and apply to upstreamUpdates array */
 function fillUpstreamUpdates(site){
     App.utils.log.msg(['Filling upstream updates of', site.name],true)
@@ -182,7 +224,7 @@ function fillUpstreamUpdates(site){
  * @param site A JSON Object with details to be written, in this case a site.
  */
 function writeSiteToDb(site){
-    App.utils.log.msg(['Writing site details to database '],true);
+    App.utils.log.msg(['Writing',site.name,'details to database -'],true);
     let key = App.Db.add.site(site);
     if (key) {
         App.utils.log.msg([' SUCCESS'], false);
@@ -190,6 +232,13 @@ function writeSiteToDb(site){
         App.utils.log.msg([' FAILURE'], false,error);
     }
 }
+
+function createMultidev(site,multidevName) {
+    App.utils.log.msg(['Creating new multidev', multidevName,'for site',site.name]);
+    let results = exec.sync('terminus',['multidev:create',site.name,multidevName]).stdout
+    return results;
+}
+
 /**
  * Generalized methods for private utility use.
  * @type {Pantheon}
@@ -204,13 +253,13 @@ module.exports = Pantheon;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkUpstream">checkUpstream</a></li><li><a href="global.html#ensureSetup">ensureSetup</a></li><li><a href="global.html#fillSites">fillSites</a></li><li><a href="global.html#fillUpstreamUpdates">fillUpstreamUpdates</a></li><li><a href="global.html#Pantheon">Pantheon</a></li><li><a href="global.html#scanForPatches">scanForPatches</a></li><li><a href="global.html#site">site</a></li><li><a href="global.html#writeSiteToDb">writeSiteToDb</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkUpstream">checkUpstream</a></li><li><a href="global.html#createMultidevs">createMultidevs</a></li><li><a href="global.html#ensureSetup">ensureSetup</a></li><li><a href="global.html#fillSites">fillSites</a></li><li><a href="global.html#fillUpstreamUpdates">fillUpstreamUpdates</a></li><li><a href="global.html#multidevExists">multidevExists</a></li><li><a href="global.html#Pantheon">Pantheon</a></li><li><a href="global.html#scanForPatches">scanForPatches</a></li><li><a href="global.html#site">site</a></li><li><a href="global.html#writeSiteToDb">writeSiteToDb</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Sep 28 2017 13:37:13 GMT-0400 (EDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Sep 28 2017 16:17:58 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
