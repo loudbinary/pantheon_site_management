@@ -16,6 +16,9 @@
 *Often used in conjunction with createMultidevs*<p>
 --loadFileDb=true
 
+*During multidev creation process Upstream updates will be applied*<p>
+--applyUpstreamUpdates=true
+
 *Examples:*<p>
 
 *Refreshes CWD/DB File Database from Pantheon, useful to run before --createMultidevs*<p>

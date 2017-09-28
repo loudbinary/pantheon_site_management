@@ -16,6 +16,7 @@ ArgumentsProcessor = {
             if (App.ArgumentsProcessor.args.loadFileDb && App.Pantheon.sites.all.length === 0) {
                 App.Pantheon.sites.all = App.Db.get.sites();
             }
+            //Method loops through all sites, and if outdated then a multidev is created.
             App.SiteManagement.createMultidevs('patching');
         }
     }

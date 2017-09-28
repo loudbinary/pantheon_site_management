@@ -51,21 +51,26 @@ function scanForPatches(refresh){
 
 /** Creates patching multidev for given site array, or if not provided all sites in database */
 function createMultidevs(multidevName) {
+    //TODO Need to filter all sites to only create multidevs for sites which have pending updates.
     _.each(App.Pantheon.sites.all,(site)=>{
-         let mdExists = App.Pantheon.sites.checkMultidevExists(site,multidevName);
-         if (mdExists===false){
-             App.Pantheon.sites.createMultidev(site,multidevName);
-         } else {
-             App.utils.log.msg(['Unable to create multidev patching, because it already exists'])
-         }
-
+        if (site.upstreamOutdated === 'outdated'){
+            let mdExists = App.Pantheon.sites.checkMultidevExists(site,multidevName);
+            if (mdExists===false){
+                let results = App.Pantheon.sites.createMultidev(site,multidevName);
+                if (results.status ===0) {
+                    App.utils.log.msg(['Sucessfully create multidev', multidevName,'for site',site.name]);
+                } else {
+                    App.utils.log.msg(['Failed to create multidev', multidevName,'for site', site.name]);
+                }
+            } else {
+                App.utils.log.msg(['Unable to create multidev patching, because it already exists'])
+            }
+        } else {
+            App.utils.log.msg(['Site',site.name,'is UP-TO-DATE, skipping multidev creation']);
+        }
     })
 }
 
-function createMultidev(site,multidevName){
-    App.utils.log.msg(['Building new multidev',multidevName,'for site',site.name]);
-    let results = exec.sync('terminus',[''])
-}
 /**
  * Generalized methods and functions for management of Pantheon sites.
  * @type {SiteManagement}
