@@ -33,16 +33,15 @@ Pantheon.sites.fill = function(){
         ensureSetup();
         fillSites()
             .then((sites)=>{
-                _.forEach(JSON.parse(sites),(site)=>{
-                    site.upstreamOutdated = false;
-                    site.upstreamUpdates = new Array;
-                    this.all.push(site);
+                let _sites = JSON.parse(sites);
+                let results = _.forEach(_sites,(site)=>{
+                   site.upstreamOutdated = '';
+                   site.upstreamUpdates = new Array;
+                   App.Pantheon.sites.all.push(site);
                 })
+                resolve(null);
             })
-            .then(()=>{
-                resolve(null)
-            })
-    })
+        })
 
 }
 
@@ -54,7 +53,7 @@ Pantheon.sites.checkUpstreamStatus = function (){
     return new Promise((resolve)=>{
         let count = 0;
         do {
-            App.Pantheon.sites.all[count].upstreamOutdated = (checkUpstream(App.Pantheon.sites.all[count]));
+            App.Pantheon.sites.all[count].upstreamOutdated = checkUpstream(App.Pantheon.sites.all[count]);
             count++;
         } while (count != App.Pantheon.sites.all.length )
         resolve(null);
@@ -76,6 +75,7 @@ Pantheon.sites.fillUpstreamUpdates = function (outdated){
         // Push each item of outdated into Global App.Pantheon.sites.all array.
         do {
             App.Pantheon.sites.all.push(outdated[count]);
+            count++
         } while(count != outdated.length)
         resolve(null);
     })
@@ -100,7 +100,7 @@ function ensureSetup(){
 function fillSites(){
     return new Promise((resolve)=>{
         var that = this.App.Pantheon;
-        this.App.utils.log.msg('Filling sites array');
+        this.App.utils.log.msg(['Filling sites array']);
         exec('terminus', ['site:list','--format=json']).then(result => {
             if (result.code === 0){
                 resolve(result.stdout);
@@ -119,18 +119,26 @@ function fillSites(){
  * @returns {String} Results of Pantheon query Either - [outdated, current]
  */
 function checkUpstream(site){
-        App.utils.log.msg('Checking status of', site.name, 'for outdated upstream');
-        return exec.sync('terminus',['upstream:updates:status', site.name + '.dev']).stdout
+    App.utils.log.msg(['Checking status of', site.name, 'for outdated upstream'],true);
+    var results = exec.sync('terminus',['upstream:updates:status', site.name + '.dev']).stdout;
+    if (!_.isNil(results) && results === 'outdated'){
+        App.utils.log.msg([' - OUT_OF_DATE'],false,true);
+    }
+    else if (!_.isNil(results) && results === 'current') {
+        App.utils.log.msg([' - UP_TO_DATE']);
+    }
+    return results;
 }
 
-/** For given site, queries Pantheon site syncronously and results of terminus upstream:updates:list and apply to upstreamUpdates array */
+/** For given site, queries Pantheon site synchronously and results of terminus upstream:updates:list and apply to upstreamUpdates array */
 function fillUpstreamUpdates(site){
-    App.utils.log.msg('Filling upstream updates of', site.name)
+    App.utils.log.msg(['Filling upstream updates of', site.name],true)
     let updates = JSON.parse(exec.sync('terminus',['upstream:updates:list', site.name + '.dev','--format=json']).stdout);
     let results = [];
-    _.each(updates[0],(item)=>{
+    _.each(updates,(item)=>{
         results.push(item)
     })
+    App.utils.log.msg([' - ','Total Upstream Updates Available: ', results.length]);
     return results;
 }
 

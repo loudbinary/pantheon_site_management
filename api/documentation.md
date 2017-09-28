@@ -18,7 +18,7 @@
 <dd><p>For given site queries Pantheon synchronously and return results of terminus upstream:updates:status</p>
 </dd>
 <dt><a href="#fillUpstreamUpdates">fillUpstreamUpdates()</a></dt>
-<dd><p>For given site, queries Pantheon site syncronously and results of terminus upstream:updates:list and apply to upstreamUpdates array</p>
+<dd><p>For given site, queries Pantheon site synchronously and results of terminus upstream:updates:list and apply to upstreamUpdates array</p>
 </dd>
 <dt><a href="#scanForPatches">scanForPatches(refresh)</a></dt>
 <dd><p>Scan for patches, and fills global App.Pantheon.sites object</p>
@@ -105,7 +105,7 @@ For given site queries Pantheon synchronously and return results of terminus ups
 <a name="fillUpstreamUpdates"></a>
 
 ## fillUpstreamUpdates()
-For given site, queries Pantheon site syncronously and results of terminus upstream:updates:list and apply to upstreamUpdates array
+For given site, queries Pantheon site synchronously and results of terminus upstream:updates:list and apply to upstreamUpdates array
 
 **Kind**: global function  
 <a name="scanForPatches"></a>
