@@ -81,6 +81,13 @@ Pantheon.sites.fillUpstreamUpdates = function (outdated){
     })
 }
 
+Pantheon.sites.writeSiteDetails = function (site) {
+    return new Promise((resolve)=>{
+        writeSiteToDb(site);
+        resolve(null);
+    })
+}
+
 /**
  * Ensure that a PANTHEON_MACHINE_TOKEN environment variable available to application
  */
@@ -138,10 +145,23 @@ function fillUpstreamUpdates(site){
     _.each(updates,(item)=>{
         results.push(item)
     })
-    App.utils.log.msg([' - ','Total Upstream Updates Available: ', results.length]);
+    App.utils.log.msg([' -','Total Upstream Updates Available:', results.length]);
     return results;
 }
 
+/**
+ * Write json object to CWD directory as Files
+ * @param site A JSON Object with details to be written, in this case a site.
+ */
+function writeSiteToDb(site){
+    App.utils.log.msg(['Writing site details to database '],true);
+    let key = App.Db.add.site(site);
+    if (key) {
+        App.utils.log.msg([' SUCCESS'], false);
+    } else {
+        App.utils.log.msg([' FAILURE'], false,error);
+    }
+}
 /**
  * Generalized methods for private utility use.
  * @type {Pantheon}

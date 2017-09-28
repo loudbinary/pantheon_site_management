@@ -38,7 +38,11 @@ function scanForPatches(refresh){
                 App.Pantheon.sites.fillUpstreamUpdates(outdated);
             })
             .then(()=>{
-                console.log('Behind updates....');
+                let count = 0;
+                do {
+                    App.Pantheon.sites.writeSiteDetails(App.Pantheon.sites.all[count])
+                    count++;
+                } while (count != App.Pantheon.sites.all.length)
             })
     }
 

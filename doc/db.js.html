@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: db.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,52 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: db.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//TODO Potentially implement https://www.npmjs.com/package/github-db instead of file based db.
+const DB = require('flat-db');
+const path = require('path');
+const dbPath = path.join(process.cwd(),'db');
 
+//Set database path to be directory where this utility was executed.
+DB.configure({
+    dir: dbPath
+})
 
-    <h3> </h3>
+/**
+ * Private function to write site JSON Object to File Db Storage
+ * @param details
+ * @returns {String} Returns key created for object written to File Db Storage
+ */
+function site(details){
+    let Site = new DB.Collection('sites');
+    let key = Site.add(details);
+    return key;
+}
+Db = {
+    add: {
+        /**
+         * Add site JSON to File Db Storage @ dbPath
+         * @param details
+         * @returns {Object} JSON Site Object
+         */
+        site: function (details){
+             let key = site(details);
+             return key;
+        }
+    }
+}
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+module.exports = Db;</code></pre>
+        </article>
+    </section>
 
 
 
