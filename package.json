@@ -1,13 +1,21 @@
 {
   "name": "pantheon_site_management",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "CLI Utility to aide in management of Pantheon organizations",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin" :  {
+    "pantheon_site_management" : "./bin/pantheon_site_management"
+  },
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/loudbinary/pantheon_site_management.git"
+  },
   "author": "",
-  "license": "ISC",
+  "email": "loudbinary@gmail.com",
+  "url": "https://github.com/loudbinary/pantheon_site_management/issues",
+  "license": "GNU",
   "dependencies": {
     "bluebird": "^3.5.0",
     "chalk": "^2.1.0",
