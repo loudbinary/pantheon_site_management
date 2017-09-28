@@ -205,6 +205,11 @@ function writeSiteToDb(site){
     }
 }
 
+/**
+ * Private method to create multidev
+ * @param site
+ * @param multidevName
+ */
 function createMultidev(site,multidevName) {
     App.utils.log.msg(['Creating new multidev', multidevName,'for site',site.name]);
     let results = exec.sync('terminus',['multidev:create',site.name,multidevName]);

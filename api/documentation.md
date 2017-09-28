@@ -29,6 +29,9 @@
 <dt><a href="#writeSiteToDb">writeSiteToDb(site)</a></dt>
 <dd><p>Write json object to CWD directory as Files</p>
 </dd>
+<dt><a href="#createMultidev">createMultidev(site, multidevName)</a></dt>
+<dd><p>Private method to create multidev</p>
+</dd>
 <dt><a href="#scanForPatches">scanForPatches(refresh)</a></dt>
 <dd><p>Scan for patches, and fills global App.Pantheon.sites object</p>
 </dd>
@@ -155,6 +158,18 @@ Write json object to CWD directory as Files
 | Param | Description |
 | --- | --- |
 | site | A JSON Object with details to be written, in this case a site. |
+
+<a name="createMultidev"></a>
+
+## createMultidev(site, multidevName)
+Private method to create multidev
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| site | 
+| multidevName | 
 
 <a name="scanForPatches"></a>
 
