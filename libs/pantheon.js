@@ -154,7 +154,7 @@ function fillUpstreamUpdates(site){
  * @param site A JSON Object with details to be written, in this case a site.
  */
 function writeSiteToDb(site){
-    App.utils.log.msg(['Writing site details to database '],true);
+    App.utils.log.msg(['Writing',site.name,'details to database -'],true);
     let key = App.Db.add.site(site);
     if (key) {
         App.utils.log.msg([' SUCCESS'], false);
