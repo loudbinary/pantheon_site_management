@@ -5,4 +5,4 @@
 * PANTHEON_MACHINE_TOKEN - [How-to Obtain Machine Token](https://pantheon.io/docs/machine-tokens/)
 
 *Source code documentation:*
-[Show Docs](src/[branch_name]/path/to/file)
+[Show Docs](https://github.com/loudbinary/pantheon_site_management/blob/master/api/documentation.md)
