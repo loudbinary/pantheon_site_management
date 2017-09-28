@@ -12,13 +12,13 @@
 <dd><p>Ensure that a PANTHEON_MACHINE_TOKEN environment variable available to application</p>
 </dd>
 <dt><a href="#fillSites">fillSites()</a></dt>
-<dd><p>Private Fills App.Pantheon.sites.all array with all Sites from Pantheon query.</p>
+<dd><p>Private Fills App.Pantheon.sites.all array with all Sites from Pantheon query terminus site:list</p>
 </dd>
-<dt><a href="#checkUpstream">checkUpstream(site)</a> ⇒ <code>Object</code></dt>
-<dd><p>For given site queries Pantheon syncronously and returns results.</p>
+<dt><a href="#checkUpstream">checkUpstream(site)</a> ⇒ <code>String</code></dt>
+<dd><p>For given site queries Pantheon synchronously and return results of terminus upstream:updates:status</p>
 </dd>
 <dt><a href="#fillUpstreamUpdates">fillUpstreamUpdates()</a></dt>
-<dd><p>For given site, queries Pantheon site syncronously and results all updates available and apply to upstreamUpdates array</p>
+<dd><p>For given site, queries Pantheon site syncronously and results of terminus upstream:updates:list and apply to upstreamUpdates array</p>
 </dd>
 <dt><a href="#scanForPatches">scanForPatches(refresh)</a></dt>
 <dd><p>Scan for patches, and fills global App.Pantheon.sites object</p>
@@ -87,16 +87,16 @@ Ensure that a PANTHEON_MACHINE_TOKEN environment variable available to applicati
 <a name="fillSites"></a>
 
 ## fillSites()
-Private Fills App.Pantheon.sites.all array with all Sites from Pantheon query.
+Private Fills App.Pantheon.sites.all array with all Sites from Pantheon query terminus site:list
 
 **Kind**: global function  
 <a name="checkUpstream"></a>
 
-## checkUpstream(site) ⇒ <code>Object</code>
-For given site queries Pantheon syncronously and returns results.
+## checkUpstream(site) ⇒ <code>String</code>
+For given site queries Pantheon synchronously and return results of terminus upstream:updates:status
 
 **Kind**: global function  
-**Returns**: <code>Object</code> - Array of Pantheon site data and details.  
+**Returns**: <code>String</code> - Results of Pantheon query Either - [outdated, current]  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -105,7 +105,7 @@ For given site queries Pantheon syncronously and returns results.
 <a name="fillUpstreamUpdates"></a>
 
 ## fillUpstreamUpdates()
-For given site, queries Pantheon site syncronously and results all updates available and apply to upstreamUpdates array
+For given site, queries Pantheon site syncronously and results of terminus upstream:updates:list and apply to upstreamUpdates array
 
 **Kind**: global function  
 <a name="scanForPatches"></a>

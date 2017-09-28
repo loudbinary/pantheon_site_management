@@ -95,7 +95,7 @@ function ensureSetup(){
 }
 
 /**
- * Private Fills App.Pantheon.sites.all array with all Sites from Pantheon query.
+ * Private Fills App.Pantheon.sites.all array with all Sites from Pantheon query terminus site:list
  */
 function fillSites(){
     return new Promise((resolve)=>{
@@ -114,16 +114,16 @@ function fillSites(){
 }
 
 /**
- * For given site queries Pantheon syncronously and returns results.
+ * For given site queries Pantheon synchronously and return results of terminus upstream:updates:status
  * @param site {Array} Pantheon site data and details.
- * @returns {Object} Array of Pantheon site data and details.
+ * @returns {String} Results of Pantheon query Either - [outdated, current]
  */
 function checkUpstream(site){
         App.utils.log.msg('Checking status of', site.name, 'for outdated upstream');
         return exec.sync('terminus',['upstream:updates:status', site.name + '.dev']).stdout
 }
 
-/** For given site, queries Pantheon site syncronously and results all updates available and apply to upstreamUpdates array */
+/** For given site, queries Pantheon site syncronously and results of terminus upstream:updates:list and apply to upstreamUpdates array */
 function fillUpstreamUpdates(site){
     App.utils.log.msg('Filling upstream updates of', site.name)
     let updates = JSON.parse(exec.sync('terminus',['upstream:updates:list', site.name + '.dev','--format=json']).stdout);
