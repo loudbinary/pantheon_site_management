@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "pantheon_site_management": "./bin/pantheon_site_management.js"
+    "pantheon_site_management": "bin/pantheon_site_management.js"
   },
   "repository": {
     "type": "git",
