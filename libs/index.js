@@ -34,7 +34,7 @@ let generateMarkdown = function generateMarkdown(obj) {
         let results = createMarkdown(key,item)
         topLevelMarkdown.push(results);
     })
-
+    topLevelMarkdown = _.compact(topLevelMarkdown);
     let topMd = [
             {h1: obj.name},
             {ul: topLevelMarkdown}
@@ -45,8 +45,7 @@ let generateMarkdown = function generateMarkdown(obj) {
         _.each(allObj,(item)=>{
 
             let itemLevelMd = [
-                {p: item.key},
-                {ul:''}
+                {h2: item.key }
             ]
             //Record object name into markdown
             //nestedResults.push(itemLevelMd);
@@ -60,16 +59,15 @@ let generateMarkdown = function generateMarkdown(obj) {
                     return Object.entries(newItem)[count][1];
                 }
                 let subMd = [
-                    {p: "Item Details : " + String(newKey)}
+                    {h4: "Item Details : " + String(newKey)}
                     ]
+                topMd[1].ul.push(subMd);
                 let count = 0;
                 do {
                     let subMarkdown = createMarkdown(key(count),value(count));
                     topMd[1].ul.push(subMarkdown);
                     count++
                 } while (count != Object.entries(newItem).length)
-                topMd[1].ul.push({p:''});
-                topMd[1].ul.push({p:''});
                 //nestedResults.push(subMd);
             })
             //topMd[1].ul.push(nestedResults);
