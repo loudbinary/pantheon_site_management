@@ -24,6 +24,10 @@
 
 *Examples:*<p>
 
+*Too Add a single site to existing CWD/DB - Can be useful for collecting interesting sites into array before executing 
+--createMultidevs or --applyUpdates commands<p>
+```pantheon_site_management --scanSites --siteName=<some new site> --loadDb```
+
 *Refreshes CWD/DB File Database from Pantheon, useful to run before --createMultidevs*<p>
 ```pantheon_site_management --scanSites --resetDb```
 
