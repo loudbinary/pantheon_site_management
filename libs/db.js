@@ -2,6 +2,7 @@
 const DB = require('flat-db');
 const path = require('path');
 const dbPath = path.join(process.cwd(),'db');
+console.log('Current DB Path is:', dbPath)
 
 //Set database path to be directory where this utility was executed.
 DB.configure({

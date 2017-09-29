@@ -46,15 +46,20 @@ ArgumentsProcessor = {
                     return site;
                 }
             })
-            App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
-            let mdResults = []
-            _.each(outDated,(item)=>{
-                mdResults.push(App.Utils.toMarkdownJson(item));
-            })
-            let md = json2md(mdResults);
-            console.log(process.cwd());
-            fs.writeFileSync(path.join(process.cwd(),'report.md'),md);
-            App.Utils.Log.msg(['Reporting completed, please review report.md']);
+            outDated = _.compact(outDated) //Removed the undefined, which are ghost of items removed not matching filter.
+            if (outDated.length>0){
+                App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
+                let mdResults = []
+                _.each(outDated,(item)=>{
+                    mdResults.push(App.Utils.toMarkdownJson(item));
+                })
+                let md = json2md(mdResults);
+                fs.writeFileSync(path.join(process.cwd(),'report.md'),md);
+                App.Utils.Log.msg(['Reporting completed, please review report.md']);
+            } else {
+                App.Utils.Log.msg(['No outdated sites found']);
+            }
+
         }
     }
 }
