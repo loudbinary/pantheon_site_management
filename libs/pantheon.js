@@ -26,13 +26,13 @@ Pantheon = {
  */
 Pantheon.sites.list = function(){
     if (this.all.length === 0 && App.ArgumentsProcessor.args.loadFileDb) {
-        App.utils.log.msg(['Loading sites from CWD/DB File storage']);
+        App.Utils.Log.msg(['Loading sites from CWD/DB File storage']);
         App.Pantheon.sites.all = App.Db.get.sites();
     }
     else {
         fillSites()
             .then(()=>{
-                App.utils.log.msg(['Finished querying all Pantheon sites for details']);
+                App.Utils.Log.msg(['Finished querying all Pantheon sites for details']);
             })
     }
     return this.all;
@@ -47,7 +47,7 @@ Pantheon.sites.fill = function(){
         if (_.isNil(App.ArgumentsProcessor.args.loadFileDb)){
             fillSites()
                 .then((sites)=>{
-                    let _sites = JSON.parse(sites);
+                    let _sites = sites;
                     let results = _.forEach(_sites,(site)=>{
                         site.upstreamOutdated = '';
                         site.upstreamUpdates = new Array;
@@ -77,6 +77,7 @@ Pantheon.sites.checkUpstreamStatus = function (){
     return new Promise((resolve)=>{
         let count = 0;
         do {
+            /** @prop {Boolean} upstreamOutdated Either 'outdated' or 'current' - Value populated by checkUpstream */
             App.Pantheon.sites.all[count].upstreamOutdated = checkUpstream(App.Pantheon.sites.all[count]);
             count++;
         } while (count != App.Pantheon.sites.all.length )
@@ -94,7 +95,7 @@ Pantheon.sites.fillUpstreamUpdates = function (outdated){
         do {
             _.flattenDeep(outdated[count].upstreamUpdates.push((fillUpstreamUpdates(outdated[count]))));
             count++;
-        } while (count != outdated.length);
+        } while (count != outdated.length || 0);
         count = 0;
         // Push each item of outdated into Global App.Pantheon.sites.all array.
         do {
@@ -131,12 +132,29 @@ function ensureSetup(){
 function fillSites(){
     return new Promise((resolve)=>{
         var that = this.App.Pantheon;
-        this.App.utils.log.msg(['Filling sites array']);
-        exec('terminus', ['site:list','--format=json']).then(result => {
+        let args = ['--format=json'];
+        var all = true;
+        this.App.Utils.Log.msg(['Filling sites array']);
+        if (!_.isNil(App.ArgumentsProcessor.args.siteName) && typeof App.ArgumentsProcessor.args.siteName == 'string') {
+            args.push(App.ArgumentsProcessor.args.siteName);
+            args.unshift('site:info')
+            all = false;
+        } else {
+            args.unshift('site:list')
+        }
+        exec('terminus',args).then(result => {
             if (result.code === 0){
-                resolve(result.stdout);
+                let results = [];
+                if (all === true) {
+                    results = _.map(JSON.parse(result.stdout),(item)=>{
+                        return item;
+                    });
+                } else {
+                    results.push(JSON.parse(result.stdout));
+                }
+                resolve(results);
             } else {
-                this.App.utils.log.error('Error retrieving sites:',result.stderr);
+                this.App.Utils.Log.error('Error retrieving sites:',result.stderr);
                 throw new Error('Error retrieving sites: '+ result.stderr);
             }
         });
@@ -149,13 +167,13 @@ function fillSites(){
  * @returns {String} Results of Pantheon query Either - [outdated, current]
  */
 function checkUpstream(site){
-    App.utils.log.msg(['Checking status of', site.name, 'for outdated upstream'],true);
+    App.Utils.Log.msg(['Checking status of', site.name, 'for outdated upstream'],true);
     var results = exec.sync('terminus',['upstream:updates:status', site.name + '.dev']).stdout;
     if (!_.isNil(results) && results === 'outdated'){
-        App.utils.log.msg([' - OUT_OF_DATE'],false,true);
+        App.Utils.Log.msg([' - OUT_OF_DATE'],false,true);
     }
     else if (!_.isNil(results) && results === 'current') {
-        App.utils.log.msg([' - UP_TO_DATE']);
+        App.Utils.Log.msg([' - UP_TO_DATE']);
     }
     return results;
 }
@@ -167,7 +185,7 @@ function checkUpstream(site){
  * @returns {boolean} Returns true if multidev exists, otherwise false.
  */
 function multidevExists(site,multidevName) {
-    App.utils.log.msg(['Verifying multidev',multidevName,'does not exist for site', site.name]);
+    App.Utils.Log.msg(['Verifying multidev',multidevName,'does not exist for site', site.name]);
     var results = exec.sync('terminus',['multidev:list',site.name,'--field=Name','--format=json']).stdout.split('\n');
     let exists = _.filter(results,(item)=>{
         return item == multidevName;
@@ -181,13 +199,13 @@ function multidevExists(site,multidevName) {
 
 /** For given site, queries Pantheon site synchronously and results of terminus upstream:updates:list and apply to upstreamUpdates array */
 function fillUpstreamUpdates(site){
-    App.utils.log.msg(['Filling upstream updates of', site.name],true)
+    App.Utils.Log.msg(['Filling upstream updates of', site.name],true)
     let updates = JSON.parse(exec.sync('terminus',['upstream:updates:list', site.name + '.dev','--format=json']).stdout);
     let results = [];
     _.each(updates,(item)=>{
         results.push(item)
     })
-    App.utils.log.msg([' -','Total Upstream Updates Available:', results.length]);
+    App.Utils.Log.msg([' -','Total Upstream Updates Available:', results.length]);
     return results;
 }
 
@@ -196,12 +214,12 @@ function fillUpstreamUpdates(site){
  * @param site A JSON Object with details to be written, in this case a site.
  */
 function writeSiteToDb(site){
-    App.utils.log.msg(['Writing',site.name,'details to database -'],true);
+    App.Utils.Log.msg(['Writing',site.name,'details to database -'],true);
     let key = App.Db.add.site(site);
     if (key) {
-        App.utils.log.msg([' SUCCESS'], false);
+        App.Utils.Log.msg([' SUCCESS'], false);
     } else {
-        App.utils.log.msg([' FAILURE'], false,error);
+        App.Utils.Log.msg([' FAILURE'], false,error);
     }
 }
 
@@ -211,7 +229,7 @@ function writeSiteToDb(site){
  * @param multidevName
  */
 function createMultidev(site,multidevName) {
-    App.utils.log.msg(['Creating new multidev', multidevName,'for site',site.name]);
+    App.Utils.Log.msg(['Creating new multidev', multidevName,'for site',site.name]);
     let results = exec.sync('terminus',['multidev:create',site.name,multidevName]);
     return results;
 }

@@ -1,9 +1,27 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 
+function createMarkdown(key,value) {
+    if (typeof value !== 'object' && typeof value !== 'undefined' && typeof key !== 'undefined') {
+        if (key.indexOf('_') !== 0) {
+            let result = key + " : " + value;
+            return result;
+        }
+        /*
+         } else {
+         let md = []
+         _.each(value,(subValue,subKey)=>{
+         md.push(createMarkdown(subKey,subValue));
+         })
+         let result = 'Item ' + key + " : " + md
+         return _.compact(result);
+         }
+         */
+    }
+}
 App = {
-    utils: {
-        log:{
+    Utils: {
+        Log:{
             /**
              *
              * @param message {Array} Array to be concatenated into string and display in console
@@ -27,6 +45,26 @@ App = {
             error: function(message){
                 chalk.red(console.log(_.join(arguments[0],' ')));
             }
+        },
+        /**
+         * Given a Site JSON object, returns neatly formatted JSON Object for emitting markdown
+         * @param site
+         */
+        toMarkdownJson: function(site){
+            let ulList = [];
+            _.each(site,(item,key) =>{
+                ulList.push(createMarkdown(key,item));
+            });
+            let md = function() {
+                return [
+                    {
+                        h1: site.name
+                    },
+                    { ul: ulList
+                    }
+                ]
+            }
+            return (md());
         }
     }
 };

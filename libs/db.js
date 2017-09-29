@@ -9,6 +9,15 @@ DB.configure({
 })
 
 /**
+ * Filter all upstreamOutdated == 'outdated' items within App.Pantheon.sites.all[]
+ * @param site
+ * @returns {Object} Items that are upstreamOutdated == 'outdated'
+ */
+function filterUpstreams(site){
+    return site.upstreamOutdated == 'outdated';
+}
+
+/**
  * Private function to write site JSON Object to File Db Storage
  * @param details
  * @returns {String} Returns key created for object written to File Db Storage
@@ -19,6 +28,9 @@ function site(details){
     return key;
 }
 Db = {
+    Collection:{
+        sites: new DB.Collection('sites')
+    },
     get: {
         /**
          *
@@ -27,7 +39,8 @@ Db = {
         sites: function(){
             let Site = new DB.Collection('sites');
             let all = Site.all();
-            App.utils.log.msg(['Loaded',all.length,'sites from CWB/DB/ File Database']);
+            let outdatedUpstreams = App.Pantheon.sites.all.filter(filterUpstreams)
+            App.Utils.Log.msg(['Loaded',all.length,'sites from CWB/DB/ File Database']);
             return all;
         }
     },

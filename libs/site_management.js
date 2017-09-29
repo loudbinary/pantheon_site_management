@@ -9,21 +9,15 @@ SiteManagement = {
  * Scan for patches, and fills global App.Pantheon.sites object
  * @param refresh {Boolean} If true, forces new Array on App.Pantheon.sites to refresh data.
  */
-function scanForPatches(refresh){
-    if (refresh === true || App.Pantheon.sites.all.length === 0){
-        if (refresh === true) {
-            app.log.msg(['Refreshing sites array']);
-            app.Pantheon.sites.all = new Array();
-        }
-        App.utils.log.msg(['Sites empty, filling array'])
+function scanForPatches(){
+        App.Utils.Log.msg(['Filling App.Pantheon.sites.all[]']);
         App.Pantheon.sites.fill()
             .then(()=>{
-                App.utils.log.msg(['Finished getting Pantheon results, found', App.Pantheon.sites.all.length, 'sites']);
+                App.Utils.Log.msg(['Finished getting Pantheon results, found', App.Pantheon.sites.all.length, 'sites']);
             })
             .then(()=>{
-                App.utils.log.msg(['Scanning for missing patches for all', App.Pantheon.sites.all.length, 'sites']);
+                App.Utils.Log.msg(['Scanning for missing patches for all', App.Pantheon.sites.all.length, 'sites']);
                 App.Pantheon.sites.checkUpstreamStatus();
-
             })
             .then(()=>{
                 let outdated = _.map(App.Pantheon.sites.all,(site)=>{
@@ -35,8 +29,12 @@ function scanForPatches(refresh){
                 return _.compact(outdated);
             })
             .then((outdated)=>{
-                App.utils.log.msg(['Found', outdated.length,'sites with outdated upstreams']);
-                App.Pantheon.sites.fillUpstreamUpdates(outdated);
+                if (outdated.length > 0) {
+                    App.Utils.Log.msg(['Found', outdated.length,'sites with outdated upstreams']);
+                    App.Pantheon.sites.fillUpstreamUpdates(outdated);
+                } else {
+                    App.Utils.Log.msg(['No sites with outdated upstreams']);
+                }
             })
             .then(()=>{
                 let count = 0;
@@ -45,8 +43,6 @@ function scanForPatches(refresh){
                     count++;
                 } while (count != App.Pantheon.sites.all.length)
             })
-    }
-
 }
 
 /** Creates patching multidev for given site array, or if not provided all sites in database */
@@ -58,15 +54,15 @@ function createMultidevs(multidevName) {
             if (mdExists===false){
                 let results = App.Pantheon.sites.createMultidev(site,multidevName);
                 if (results.status ===0) {
-                    App.utils.log.msg(['Sucessfully create multidev', multidevName,'for site',site.name]);
+                    App.Utils.Log.msg(['Sucessfully create multidev', multidevName,'for site',site.name]);
                 } else {
-                    App.utils.log.msg(['Failed to create multidev', multidevName,'for site', site.name]);
+                    App.Utils.Log.msg(['Failed to create multidev', multidevName,'for site', site.name]);
                 }
             } else {
-                App.utils.log.msg(['Unable to create multidev patching, because it already exists'])
+                App.Utils.Log.msg(['Unable to create multidev patching, because it already exists'])
             }
         } else {
-            App.utils.log.msg(['Site',site.name,'is UP-TO-DATE, skipping multidev creation']);
+            App.Utils.Log.msg(['Site',site.name,'is UP-TO-DATE, skipping multidev creation']);
         }
     })
 }

@@ -19,10 +19,13 @@
 *During multidev creation process Upstream updates will be applied*<p>
 --applyUpstreamUpdates=true
 
+*Resets local CWD/Db, priority option analyzed first*<p>
+--resetDb=true
+
 *Examples:*<p>
 
 *Refreshes CWD/DB File Database from Pantheon, useful to run before --createMultidevs*<p>
-```pantheon_site_management --refreshSites```
+```pantheon_site_management --scanSites```
 
 *Created multidev named "patching" for any site in CWD/DB which is out of date*<p>
 ```pantheon_site_management --createMultidevs```
