@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 function createMarkdown(key,value) {
     if (typeof value !== 'object' && typeof value !== 'undefined' && typeof key !== 'undefined') {
-        let result = key + " : " + value.trim();
+        let result = key + " : " + (value.trim());
         return result;
     }
 }
