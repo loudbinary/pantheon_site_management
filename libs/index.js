@@ -15,7 +15,7 @@ function createMarkdown(key,value) {
  * Seperated any found Array/Object to it's own recurse function for markdown creation.
  * @param obj
  */
-let recurseObj = function recurseObj(obj) {
+let generateMarkdown = function generateMarkdown(obj) {
     let allObj = _.compact(_.map(obj,(item,key)=>{
         let newItem = {};
         if (typeof item === 'object'){
@@ -39,22 +39,45 @@ let recurseObj = function recurseObj(obj) {
             {h1: obj.name},
             {ul: topLevelMarkdown}
         ]
+    if(allObj.length >> 0) {
+        let nestedResults = []
 
-    _.each(allObj,(item)=>{
-        let finalResults = []
-            _.each(item.value,(newItem)=>{
-                _.each(newItem,(finalnew,finalnewKey)=>{
-                    finalResults.push(createMarkdown(finalnewKey,finalnew));
-                })
+        _.each(allObj,(item)=>{
+
+            let itemLevelMd = [
+                {p: item.key},
+                {ul:''}
+            ]
+            //Record object name into markdown
+            //nestedResults.push(itemLevelMd);
+            topMd[1].ul.push(itemLevelMd);
+            // Get each property as details and append ul into off object for Markdown conversion.
+            _.each(item.value,(newItem,newKey)=>{
+                let key = function (count){
+                    return Object.entries(newItem)[count][0];
+                }
+                let value = function (count){
+                    return Object.entries(newItem)[count][1];
+                }
+                let subMd = [
+                    {p: "Item Details : " + String(newKey)}
+                    ]
+                let count = 0;
+                do {
+                    let subMarkdown = createMarkdown(key(count),value(count));
+                    topMd[1].ul.push(subMarkdown);
+                    count++
+                } while (count != Object.entries(newItem).length)
+                topMd[1].ul.push({p:''});
+                topMd[1].ul.push({p:''});
+                //nestedResults.push(subMd);
             })
-        let md = [
-            {p: item.key},
-            {ul: finalResults}
-        ]
-        topMd[1].ul.push(md)
-    })
-    // Returns extracted md array, and any remaining objects to be parsed for mark down.
-    return topMd;
+            //topMd[1].ul.push(nestedResults);
+        })
+        // Returns extracted md array, and any remaining objects to be parsed for mark down.
+        return topMd;
+    }
+
 }
 
 App = {
@@ -89,7 +112,7 @@ App = {
          * @param site
          */
         toMarkdownJson: function (site) {
-            let results = recurseObj(site);
+            let results = generateMarkdown(site);
             return results;
         }
     }
