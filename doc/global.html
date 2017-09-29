@@ -273,7 +273,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line151">line 151</a>
+        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -439,7 +439,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line213">line 213</a>
+        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line231">line 231</a>
     </li></ul></dd>
     
 
@@ -521,7 +521,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="site_management.js.html">site_management.js</a>, <a href="site_management.js.html#line53">line 53</a>
+        <a href="site_management.js.html">site_management.js</a>, <a href="site_management.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -603,7 +603,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line118">line 118</a>
+        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line119">line 119</a>
     </li></ul></dd>
     
 
@@ -685,7 +685,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line131">line 131</a>
+        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -767,7 +767,283 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line183">line 183</a>
+        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line201">line 201</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="filterUpstreams"><span class="type-signature"></span>filterUpstreams<span class="signature">(site)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Filter all upstreamOutdated == 'outdated' items within App.Pantheon.sites.all[]
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>site</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="db.js.html">db.js</a>, <a href="db.js.html#line17">line 17</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Items that are upstreamOutdated == 'outdated'
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="generateMarkdown"><span class="type-signature"></span>generateMarkdown<span class="signature">(obj)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Used to generate markdown documentation of sites in database.
+Cleans up unnecessary _id_ and _ts_ from details
+Seperated any found Array/Object to it's own recurse function for markdown creation.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -921,7 +1197,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line169">line 169</a>
+        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -1200,7 +1476,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="db.js.html">db.js</a>, <a href="db.js.html#line16">line 16</a>
+        <a href="db.js.html">db.js</a>, <a href="db.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -1348,7 +1624,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line198">line 198</a>
+        <a href="pantheon.js.html">pantheon.js</a>, <a href="pantheon.js.html#line216">line 216</a>
     </li></ul></dd>
     
 
@@ -1390,13 +1666,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkUpstream">checkUpstream</a></li><li><a href="global.html#createMultidev">createMultidev</a></li><li><a href="global.html#createMultidevs">createMultidevs</a></li><li><a href="global.html#ensureSetup">ensureSetup</a></li><li><a href="global.html#fillSites">fillSites</a></li><li><a href="global.html#fillUpstreamUpdates">fillUpstreamUpdates</a></li><li><a href="global.html#multidevExists">multidevExists</a></li><li><a href="global.html#Pantheon">Pantheon</a></li><li><a href="global.html#scanForPatches">scanForPatches</a></li><li><a href="global.html#site">site</a></li><li><a href="global.html#writeSiteToDb">writeSiteToDb</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkUpstream">checkUpstream</a></li><li><a href="global.html#createMultidev">createMultidev</a></li><li><a href="global.html#createMultidevs">createMultidevs</a></li><li><a href="global.html#ensureSetup">ensureSetup</a></li><li><a href="global.html#fillSites">fillSites</a></li><li><a href="global.html#fillUpstreamUpdates">fillUpstreamUpdates</a></li><li><a href="global.html#filterUpstreams">filterUpstreams</a></li><li><a href="global.html#generateMarkdown">generateMarkdown</a></li><li><a href="global.html#multidevExists">multidevExists</a></li><li><a href="global.html#Pantheon">Pantheon</a></li><li><a href="global.html#scanForPatches">scanForPatches</a></li><li><a href="global.html#site">site</a></li><li><a href="global.html#writeSiteToDb">writeSiteToDb</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Sep 28 2017 17:46:00 GMT-0400 (EDT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Sep 29 2017 19:01:36 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
