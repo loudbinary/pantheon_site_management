@@ -54,7 +54,6 @@ ArgumentsProcessor = {
                     mdResults.push(App.Utils.toMarkdownJson(item));
                 })
                 let md = json2md(mdResults);
-                console.log(process.cwd());
                 fs.writeFileSync(path.join(process.cwd(),'report.md'),md);
                 App.Utils.Log.msg(['Reporting completed, please review report.md']);
             } else {
