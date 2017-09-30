@@ -52,11 +52,28 @@ ArgumentsProcessor = {
                     App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
                     let mdResults = []
                     _.each(outDated,(item)=>{
-                        mdResults.push(App.Utils.toMarkdownJson(item));
+                        mdResults.push(App.Utils.toMarkdown(item));
                     })
                     let md = json2md(mdResults);
                     fs.writeFileSync(path.join(process.cwd(),'report.md'),md);
                     App.Utils.Log.msg(['Reporting completed, please review report.md']);
+                } else {
+                    App.Utils.Log.msg(['No outdated sites found']);
+                }
+            }
+            if (yargs.reportOutdated === 'html'){
+                let sites = App.Db.get.sites()
+                let outDated = _.map(sites,(site)=>{
+                    if (site.upstreamOutdated === 'outdated'){
+                        return site;
+                    }
+                })
+                outDated = _.compact(outDated) //Removed the undefined, which are ghost of items removed not matching filter.
+                if (outDated.length>0){
+                    //Process the html generation.
+                    App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
+
+
                 } else {
                     App.Utils.Log.msg(['No outdated sites found']);
                 }
