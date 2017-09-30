@@ -91,18 +91,18 @@ App = {
                 no_new_line = (typeof no_new_line !== 'undefined') ? no_new_line : false;
                 error = (typeof error !== 'undefined') ? error : false;
                 if (!no_new_line) {
-                    chalk.green(console.log(_.join(arguments[0], ' ')));
+                    console.log(chalk.green(_.join(arguments[0], ' ')));
                 } else {
                     if (error) {
-                        chalk.red(process.stdout.write(_.join(arguments[0], ' ')));
+                        process.stdout.write(chalk.red(_.join(arguments[0], ' ')));
                     } else {
-                        chalk.green(process.stdout.write(_.join(arguments[0], ' ')));
+                        process.stdout.write(chalk.green(_.join(arguments[0], ' ')));
                     }
 
                 }
             },
             error: function (message) {
-                chalk.red(console.log(_.join(arguments[0], ' ')));
+                console.log(chalk.red(_.join(arguments[0], ' ')));
             }
         },
         /**
