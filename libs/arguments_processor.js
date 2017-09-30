@@ -40,26 +40,27 @@ ArgumentsProcessor = {
         }
 
         if (!_.isNil(yargs.reportOutdated)) {
-            let sites = App.Db.get.sites()
-            let outDated = _.map(sites,(site)=>{
-                if (site.upstreamOutdated === 'outdated'){
-                    return site;
-                }
-            })
-            outDated = _.compact(outDated) //Removed the undefined, which are ghost of items removed not matching filter.
-            if (outDated.length>0){
-                App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
-                let mdResults = []
-                _.each(outDated,(item)=>{
-                    mdResults.push(App.Utils.toMarkdownJson(item));
+            if (yargs.reportOutdated === 'markdown'){
+                let sites = App.Db.get.sites()
+                let outDated = _.map(sites,(site)=>{
+                    if (site.upstreamOutdated === 'outdated'){
+                        return site;
+                    }
                 })
-                let md = json2md(mdResults);
-                fs.writeFileSync(path.join(process.cwd(),'report.md'),md);
-                App.Utils.Log.msg(['Reporting completed, please review report.md']);
-            } else {
-                App.Utils.Log.msg(['No outdated sites found']);
+                outDated = _.compact(outDated) //Removed the undefined, which are ghost of items removed not matching filter.
+                if (outDated.length>0){
+                    App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
+                    let mdResults = []
+                    _.each(outDated,(item)=>{
+                        mdResults.push(App.Utils.toMarkdownJson(item));
+                    })
+                    let md = json2md(mdResults);
+                    fs.writeFileSync(path.join(process.cwd(),'report.md'),md);
+                    App.Utils.Log.msg(['Reporting completed, please review report.md']);
+                } else {
+                    App.Utils.Log.msg(['No outdated sites found']);
+                }
             }
-
         }
     }
 }
