@@ -23,7 +23,7 @@ module.exports.generateMarkdown = function generateMarkdown(obj) {
             newItem.value = _.flattenDeep(item)
             return newItem
         }
-        if (key.indexOf('_') === 0) { //Remove unneeded fildb properties for markdown report.
+        if (key.indexOf('_') === 0) { //Remove unneeded properties for markdown report.
             delete obj[key];
         }
     }))

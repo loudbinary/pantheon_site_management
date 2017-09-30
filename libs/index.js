@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const markdown = require('./reports/markdown.js')
-const html = require('./reports.htmls.js');
+const html = require('./reports/html.js');
 
 App = {
     Utils: {
@@ -38,8 +38,8 @@ App = {
             let results = markdown.generateMarkdown(site);
             return results;
         },
-        toHtml: function (site) {
-            let results = html.generateHtml(site);
+        toHtml: function (sites) {
+            let results = html.generateHtml(sites);
             return results;
         }
     }

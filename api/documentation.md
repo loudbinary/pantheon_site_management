@@ -14,11 +14,6 @@
 <dt><a href="#site">site(details)</a> ⇒ <code>String</code></dt>
 <dd><p>Private function to write site JSON Object to File Db Storage</p>
 </dd>
-<dt><a href="#generateMarkdown">generateMarkdown(obj)</a></dt>
-<dd><p>Used to generate markdown documentation of sites in database.
-Cleans up unnecessary <em>id</em> and <em>ts</em> from details
-Seperated any found Array/Object to it&#39;s own recurse function for markdown creation.</p>
-</dd>
 <dt><a href="#ensureSetup">ensureSetup()</a></dt>
 <dd><p>Ensure that a PANTHEON_MACHINE_TOKEN environment variable available to application</p>
 </dd>
@@ -124,19 +119,6 @@ Private function to write site JSON Object to File Db Storage
 | Param |
 | --- |
 | details | 
-
-<a name="generateMarkdown"></a>
-
-## generateMarkdown(obj)
-Used to generate markdown documentation of sites in database.
-Cleans up unnecessary _id_ and _ts_ from details
-Seperated any found Array/Object to it's own recurse function for markdown creation.
-
-**Kind**: global function  
-
-| Param |
-| --- |
-| obj | 
 
 <a name="ensureSetup"></a>
 

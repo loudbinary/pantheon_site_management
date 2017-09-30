@@ -72,7 +72,8 @@ ArgumentsProcessor = {
                 if (outDated.length>0){
                     //Process the html generation.
                     App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
-
+                    let htmlResults = App.Utils.toHtml(outDated);
+                    console.log(htmlResults);
 
                 } else {
                     App.Utils.Log.msg(['No outdated sites found']);
