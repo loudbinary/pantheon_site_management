@@ -78,7 +78,8 @@ Pantheon.sites.fill = function(){
                         resolve(null);
                     })
                 }
-            } else {
+            }
+            else {
                 //We must be scanning for all available sites in Pantheon.
                 fillSites().then((sites)=>{
                     populateJobFields(sites);
@@ -124,14 +125,17 @@ Pantheon.sites.fillUpstreamUpdates = function (outdated){
         let count = 0;
         do {
             _.flattenDeep(outdated[count].upstreamUpdates.push((fillUpstreamUpdates(outdated[count]))));
+            App.Pantheon.sites.all.push(outdated[count]);
             count++;
         } while (count != outdated.length || 0);
         count = 0;
+        /*
         // Push each item of outdated into Global App.Pantheon.sites.all array.
         do {
             App.Pantheon.sites.all.push(outdated[count]);
             count++
         } while(count != outdated.length)
+        */
         resolve(null);
     })
 }
@@ -167,6 +171,7 @@ function populateJobFields(queryResults){
         App.Pantheon.sites.all.push(site);
     })
 }
+
 /**
  * Performs site object fulfillment for a single site at Pantheon, called by fillSites - Resolves #8
  * @param siteName
