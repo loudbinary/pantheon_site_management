@@ -26,12 +26,20 @@
 
 *Too Add a single site to existing CWD/DB - Can be useful for collecting interesting sites into array before executing 
 --createMultidevs or --applyUpdates commands<p>
+```pantheon_site_management --scanSites --siteName=<some new site1>,<some new site2> --loadDb```
+
+*Too Add a multiple sites to existing CWD/DB - Can be useful for collecting interesting sites into array before executing 
+--createMultidevs or --applyUpdates commands<p>
 ```pantheon_site_management --scanSites --siteName=<some new site> --loadDb```
+
 
 *Refreshes CWD/DB File Database from Pantheon, useful to run before --createMultidevs*<p>
 ```pantheon_site_management --scanSites --resetDb```
 
-*Scans and records details into clean empty CWD/Db File database*<p>
+*Scans and records details of one site into clean empty CWD/Db File database*<p>
+```pantheon_site_management --scanSites --siteName=<sitename> --resetDb```
+
+*Scans and records details of multiple comma delimited sites into clean empty CWD/Db File database*<p>
 ```pantheon_site_management --scanSites --siteName=<sitename> --resetDb```
 
 *Created multidev named "patching" for any site in CWD/DB which is out of date*<p>

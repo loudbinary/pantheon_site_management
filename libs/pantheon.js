@@ -51,10 +51,10 @@ Pantheon.sites.fill = function(){
             })
 
             // Keep original behavior, prior to implementation of #8
-            if (sitesForProcessing.length =1){
+            if (sitesForProcessing.length === 1){
                 fillSites().then((sites)=>{
                     let _sites = sites;
-                    let results = _.forEach(_sites,(site)=>{
+                    _.forEach(_sites,(site)=>{
                         site.upstreamOutdated = '';
                         site.upstreamUpdates = new Array;
                         App.Pantheon.sites.all.push(site);
@@ -64,18 +64,29 @@ Pantheon.sites.fill = function(){
             }/** This logic branch is for new processing details in support of #8 */
             else {
                 App.Utils.Log.msg(['Filling details for', sitesForProcessing.length,'requested sites']);
-
-                do {
-                    App.Utils.Log.msg(['......Processing #', count]);
-                    count++
-                } while(count != sitesForProcessing.length);
-                App.Utils.Log.msg('Completed proces querying Pantheon for site details');
+                newFillSite().then((queryCmds) => {
+                    let finalResults = [];
+                    let count = 0;
+                    do {
+                        finalResults.push(JSON.parse(getSingleSiteDetails(queryCmds[count]).stdout));
+                        count++
+                    } while (count !== queryCmds.length)
+                    //Modify needed properties for processing later on each site result, and push into global Array
+                    count = 0;
+                    do {
+                        finalResults[count].upstreamOutdated = '';
+                        finalResults[count].upstreamUpdates = new Array;
+                        App.Pantheon.sites.all.push(finalResults[count]);
+                        count++
+                    } while (count != finalResults.length)
+                    resolve(null);
+                })
             }
 
         }
         else {
             App.Pantheon.sites.all = App.Db.get.sites();
-        }
+            }
         })
 }
 
@@ -143,6 +154,30 @@ function ensureSetup(){
     }
 }
 
+
+/**
+ * Performs site object fulfillment for a single site at Pantheon, called by fillSites - Resolves #8
+ * @param siteName
+ */
+function newFillSite() {
+    return new Promise((resolve)=>{
+        let baseArgs = ['--format=json'];
+        let queryCmds = [];
+        let siteNames = _.each(App.ArgumentsProcessor.args.siteName.split(','),(site)=>{
+            return site.trim();
+        })
+
+        _.each(siteNames,(site)=>{
+            let newArgs = new Array();
+            _.merge(newArgs,baseArgs);
+            newArgs.push(site);
+            newArgs.unshift('site:info');
+            queryCmds.push(newArgs);
+        })
+        resolve(queryCmds);
+    })
+}
+
 /**
  * Private Fills App.Pantheon.sites.all array with all Sites from Pantheon query terminus site:list
  */
@@ -163,6 +198,10 @@ function fillSites(){
             resolve(results);
         })
     })
+}
+
+function getSingleSiteDetails(args){
+    return exec.sync('terminus', args);
 }
 
 function getSiteDetails(args,all,callback) {

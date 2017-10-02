@@ -40,7 +40,10 @@ Db = {
         sites: function(){
             let Site = new DB.Collection('sites');
             let all = Site.all();
-            let outdatedUpstreams = App.Pantheon.sites.all.filter(filterUpstreams)
+            if (all.length > 0){
+                // We have sites to process..otherwise, simply do nothing.
+                let outdatedUpstreams = App.Pantheon.sites.all.filter(filterUpstreams)
+            }
             App.Utils.Log.msg(['Loaded',all.length,'sites from CWB/DB/ File Database']);
             return all;
         }
