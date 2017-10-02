@@ -39,17 +39,33 @@ function buildHtml(data) {
         $(document).ready(function(){
             var data = [${dataString}]
             $('#tree1').tree({
-                data: data
+                data: data,
+                autoOpen: true
             });
+       
+            var toggleNodes = (function(){
+                var tree_data = $('#tree1').tree('getTree');
+              return tree_data;
+            })();
+            $("#open_tree").click(function(e){
+              $.each(toggleNodes.children,function (index,value){
+                $('#tree1').tree('openNode',value);
+              })
+            })
+            $("#close_tree").click(function(e){
+              $.each(toggleNodes.children,function (index,value){
+                $('#tree1').tree('closeNode',value);
+              })
+            })
         })
-
-
         </script>
         </head>
         <body>
 
         <h2>Outdated Upstream Patching Reports for Pantheon Sites</h2>
-    <div id="tree1"></div>
+        <input type="button" id="open_tree" value="Expand"/>
+        <input type="button" id="close_tree" value="Collapse"/>
+        <div id="tree1"></div>
         </body>
         </html>`
 };
@@ -127,7 +143,6 @@ let buildTree = function buildTree(objs) {
                 let nestedDetail = newTreeNode('#' + index,index);
                 let counter = 0;
                 _.each(Object.entries(nestedValues),(item,key)=>{
-                    //let prop = Object.entries(nestedValues[nestedIndex])[0]
                     nestedDetail.children.push(generateChildNode(item[0],counter,item[1]))
                 })
                 nestedNode.children.push(nestedDetail);
