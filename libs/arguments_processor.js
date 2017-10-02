@@ -94,7 +94,7 @@ function processReportOutdatedHtml(emitPdf){
     }
 }
 /**
- * Saves html report to cwd reports/html_report directory
+ * Saves html report to cwd reports/html_reporty directory
  * @param html
  */
 function saveHtmlResults(html){
