@@ -131,7 +131,6 @@ function ensureSetup(){
  */
 function fillSites(){
     return new Promise((resolve)=>{
-        var that = this.App.Pantheon;
         let args = ['--format=json'];
         var all = true;
         this.App.Utils.Log.msg(['Filling sites array']);
@@ -142,23 +141,30 @@ function fillSites(){
         } else {
             args.unshift('site:list')
         }
-        exec('terminus',args).then(result => {
-            if (result.code === 0){
-                let results = [];
-                if (all === true) {
-                    results = _.map(JSON.parse(result.stdout),(item)=>{
-                        return item;
-                    });
-                } else {
-                    results.push(JSON.parse(result.stdout));
-                }
-                resolve(results);
-            } else {
-                this.App.Utils.Log.error('Error retrieving sites:',result.stderr);
-                throw new Error('Error retrieving sites: '+ result.stderr);
-            }
-        });
+        getSiteDetails(args,all,(results)=>{
+            App.Utils.Log.msg(['Completed site fill.']);
+            resolve(results);
+        })
     })
+}
+
+function getSiteDetails(args,all,callback) {
+    exec('terminus',args).then(result => {
+        if (result.code === 0){
+            let results = [];
+            if (all === true) {
+                results = _.map(JSON.parse(result.stdout),(item)=>{
+                    return item;
+                });
+            } else {
+                results.push(JSON.parse(result.stdout));
+            }
+            callback(results);
+        } else {
+            this.App.Utils.Log.error('Error retrieving sites:',result.stderr);
+            throw new Error('Error retrieving sites: '+ result.stderr);
+        }
+    });
 }
 
 /**

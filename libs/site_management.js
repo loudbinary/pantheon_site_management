@@ -10,7 +10,6 @@ SiteManagement = {
  * @param refresh {Boolean} If true, forces new Array on App.Pantheon.sites to refresh data.
  */
 function scanForPatches(){
-        App.Utils.Log.msg(['Filling App.Pantheon.sites.all[]']);
         App.Pantheon.sites.fill()
             .then(()=>{
                 App.Utils.Log.msg(['Finished getting Pantheon results, found', App.Pantheon.sites.all.length, 'sites']);
