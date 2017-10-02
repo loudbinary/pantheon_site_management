@@ -1,7 +1,7 @@
 const yargs = require('yargs').argv
 const _ = require('lodash');
 const json2md = require('json2md');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 ArgumentsProcessor = {
@@ -73,7 +73,7 @@ ArgumentsProcessor = {
                     //Process the html generation.
                     App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
                     let htmlResults = App.Utils.toHtml(outDated);
-                    console.log(htmlResults);
+                    saveHtmlResults(htmlResults);
 
                 } else {
                     App.Utils.Log.msg(['No outdated sites found']);
@@ -81,6 +81,15 @@ ArgumentsProcessor = {
             }
         }
     }
+}
+
+function saveHtmlResults(html){
+    let templateDir = path.join(path.resolve(__dirname,'reports','html_template'));
+    let reportingDir = path.join(process.cwd(),'html_report');
+    App.Utils.Log.msg(['Saving html report to ', reportingDir],true);
+    fs.copySync(templateDir,reportingDir);
+    fs.outputFileSync(path.join(reportingDir,'index.html'),html);
+    App.Utils.Log.msg(['- COMPLETED']);
 }
 
 module.exports = ArgumentsProcessor;
