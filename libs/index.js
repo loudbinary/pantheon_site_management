@@ -1,7 +1,8 @@
 const chalk = require('chalk');
 const _ = require('lodash');
-const markdown = require('./reports/markdown.js')
-const html = require('./reports/html.js');
+const path = require('path')
+const markdown = require(path.join(__dirname,'./reports/markdown.js'));
+const html = require(path.join(__dirname,'./reports/html.js'));
 
 App = {
     Utils: {

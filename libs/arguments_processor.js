@@ -103,14 +103,15 @@ function saveHtmlResults(html){
     App.Utils.Log.msg(['Saving html report to ', reportingDir],true);
     fs.copySync(templateDir,reportingDir);
     fs.outputFileSync(path.join(reportingDir,'index.html'),html);
-    App.Utils.Log.msg(['- COMPLETED']);
+    App.Utils.Log.msg([' - COMPLETED']);
 }
 
 function savePdfResults(html) {
     let reportingDir = path.join(process.cwd(),'reports','pdf_report');
+    App.Utils.Log.msg(['Producing pdf report to ', reportingDir],true);
     fs.emptyDirSync(reportingDir);
     pdf.create(html).toFile(path.join(reportingDir,'report.pdf'),function(err, res){
-        console.log(res.filename);
+        App.Utils.Log.msg([' - COMPLETED']);
     });
 
 }
