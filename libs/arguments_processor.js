@@ -3,6 +3,7 @@ const _ = require('lodash');
 const json2md = require('json2md');
 const fs = require('fs-extra');
 const path = require('path');
+const pdf = require('html-pdf');
 
 ArgumentsProcessor = {
     args: yargs,
@@ -62,34 +63,55 @@ ArgumentsProcessor = {
                 }
             }
             if (yargs.reportOutdated === 'html'){
-                let sites = App.Db.get.sites()
-                let outDated = _.map(sites,(site)=>{
-                    if (site.upstreamOutdated === 'outdated'){
-                        return site;
-                    }
-                })
-                outDated = _.compact(outDated) //Removed the undefined, which are ghost of items removed not matching filter.
-                if (outDated.length>0){
-                    //Process the html generation.
-                    App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
-                    let htmlResults = App.Utils.toHtml(outDated);
-                    saveHtmlResults(htmlResults);
+                processReportOutdatedHtml(false);
+            }
 
-                } else {
-                    App.Utils.Log.msg(['No outdated sites found']);
-                }
+            if (yargs.reportOutdated === 'pdf'){
+                processReportOutdatedHtml(true);
             }
         }
     }
 }
 
+function processReportOutdatedHtml(emitPdf){
+    let sites = App.Db.get.sites()
+    let outDated = _.map(sites,(site)=>{
+        if (site.upstreamOutdated === 'outdated'){
+            return site;
+        }
+    })
+    outDated = _.compact(outDated) //Removed the undefined, which are ghost of items removed not matching filter.
+    if (outDated.length>0){
+        //Process the html generation.
+        App.Utils.Log.msg(['Found', outDated.length,'sites, details for each are below']);
+        let htmlResults = App.Utils.toHtml(outDated);
+        saveHtmlResults(htmlResults);
+        if(emitPdf === true) {
+            savePdfResults(htmlResults);
+        }
+    } else {
+        App.Utils.Log.msg(['No outdated sites found']);
+    }
+}
+/**
+ * Saves html report to cwd reports/html_report directory
+ * @param html
+ */
 function saveHtmlResults(html){
     let templateDir = path.join(path.resolve(__dirname,'reports','html_template'));
-    let reportingDir = path.join(process.cwd(),'html_report');
+    let reportingDir = path.join(process.cwd(),'reports','html_report');
     App.Utils.Log.msg(['Saving html report to ', reportingDir],true);
     fs.copySync(templateDir,reportingDir);
     fs.outputFileSync(path.join(reportingDir,'index.html'),html);
     App.Utils.Log.msg(['- COMPLETED']);
 }
 
+function savePdfResults(html) {
+    let reportingDir = path.join(process.cwd(),'reports','pdf_report');
+    fs.emptyDirSync(reportingDir);
+    pdf.create(html).toFile(path.join(reportingDir,'report.pdf'),function(err, res){
+        console.log(res.filename);
+    });
+
+}
 module.exports = ArgumentsProcessor;

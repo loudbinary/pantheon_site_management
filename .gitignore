@@ -1,5 +1,6 @@
 html_report
 report.md
+reports
 .idea
 db/
 # Created by https://www.gitignore.io/api/node,webstorm

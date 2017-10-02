@@ -40,7 +40,6 @@ module.exports.generateMarkdown = function generateMarkdown(obj) {
     ]
     if(allObj.length >> 0) {
         let nestedResults = []
-
         _.each(allObj,(item)=>{
 
             let itemLevelMd = [

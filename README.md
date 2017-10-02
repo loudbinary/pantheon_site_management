@@ -45,5 +45,11 @@
 *Created multidev named "patching" for any site in CWD/DB which is out of date*<p>
 ```pantheon_site_management --loadDb --createMultidevs```
 
+*Emits html report to cwd/reports/html_report*<p>
+```pantheon_site_management --loadDb --reportOutdated=html```
+
+*Emits pdf document report to cwd/reports/pdf_report*<p>
+```pantheon_site_management --loadDb --reportOutdated=pdf```
+
 *Source code documentation:*
 [Show Docs](https://github.com/loudbinary/pantheon_site_management/blob/master/api/documentation.md)
