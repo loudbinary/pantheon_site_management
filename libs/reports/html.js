@@ -32,6 +32,7 @@ function buildHtml(data) {
     return `<!DOCTYPE html>
         <html>
         <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="js/tree.jquery.js"></script>
         <link rel="stylesheet" href="css/jqtree.css">
@@ -63,8 +64,8 @@ function buildHtml(data) {
         <body>
 
         <h2>Outdated Upstream Patching Reports for Pantheon Sites</h2>
-        <input type="button" id="open_tree" value="Expand"/>
-        <input type="button" id="close_tree" value="Collapse"/>
+        <input type="button" class="btn btn-primary" id="open_tree" value="Expand"/>
+        <input type="button" class="btn btn-primary" id="close_tree" value="Collapse"/></p>
         <div id="tree1"></div>
         </body>
         </html>`
