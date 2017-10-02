@@ -45,44 +45,46 @@ Pantheon.sites.fill = function(){
     return new Promise((resolve)=>{
         ensureSetup();
         if (_.isNil(App.ArgumentsProcessor.args.loadFileDb)){
-            // Converts --siteName to an array, for any string seperated by a ,
-            let sitesForProcessing = _.each(App.ArgumentsProcessor.args.siteName.split([',']),(site)=>{
-                return site.trim();
-            })
-
-            // Keep original behavior, prior to implementation of #8
-            if (sitesForProcessing.length === 1){
-                fillSites().then((sites)=>{
-                    let _sites = sites;
-                    _.forEach(_sites,(site)=>{
-                        site.upstreamOutdated = '';
-                        site.upstreamUpdates = new Array;
-                        App.Pantheon.sites.all.push(site);
-                    })
-                    resolve(null);
+            // If possible, Converts --siteName to an array, for any string seperated by a ,
+            if ((!_.isNil(App.ArgumentsProcessor.args.siteName) && typeof  App.ArgumentsProcessor.args.siteName == 'string')) {
+                let sitesForProcessing = _.each(App.ArgumentsProcessor.args.siteName.split([',']),(site)=>{
+                    return site.trim();
                 })
-            }/** This logic branch is for new processing details in support of #8 */
-            else {
-                App.Utils.Log.msg(['Filling details for', sitesForProcessing.length,'requested sites']);
-                newFillSite().then((queryCmds) => {
-                    let finalResults = [];
-                    let count = 0;
-                    do {
-                        finalResults.push(JSON.parse(getSingleSiteDetails(queryCmds[count]).stdout));
-                        count++
-                    } while (count !== queryCmds.length)
-                    //Modify needed properties for processing later on each site result, and push into global Array
-                    count = 0;
-                    do {
-                        finalResults[count].upstreamOutdated = '';
-                        finalResults[count].upstreamUpdates = new Array;
-                        App.Pantheon.sites.all.push(finalResults[count]);
-                        count++
-                    } while (count != finalResults.length)
+
+                // Keep original behavior, prior to implementation of #8
+                if (sitesForProcessing.length === 1){
+                    fillSites().then((sites)=>{
+                        populateJobFields(sites);
+                        resolve(null);
+                    })
+                }/** This logic branch is for new processing details in support of #8 */
+                else if (sitesForProcessing.length > 1) {
+                    App.Utils.Log.msg(['Filling details for', sitesForProcessing.length,'requested sites']);
+                    newFillSite().then((queryCmds) => {
+                        let finalResults = [];
+                        let count = 0;
+                        do {
+                            finalResults.push(JSON.parse(getSingleSiteDetails(queryCmds[count]).stdout));
+                            count++
+                        } while (count !== queryCmds.length)
+                        //Modify needed properties for processing later on each site result, and push into global Array
+                        count = 0;
+                        do {
+                            finalResults[count].upstreamOutdated = '';
+                            finalResults[count].upstreamUpdates = new Array;
+                            App.Pantheon.sites.all.push(finalResults[count]);
+                            count++
+                        } while (count != finalResults.length)
+                        resolve(null);
+                    })
+                }
+            } else {
+                //We must be scanning for all available sites in Pantheon.
+                fillSites().then((sites)=>{
+                    populateJobFields(sites);
                     resolve(null);
                 })
             }
-
         }
         else {
             App.Pantheon.sites.all = App.Db.get.sites();
@@ -154,7 +156,17 @@ function ensureSetup(){
     }
 }
 
-
+/**
+ * Populate needed metadata items on to query results from Pantheon for sites.
+ * @param queryResults
+ */
+function populateJobFields(queryResults){
+    _.forEach(queryResults,(site)=>{
+        site.upstreamOutdated = '';
+        site.upstreamUpdates = new Array;
+        App.Pantheon.sites.all.push(site);
+    })
+}
 /**
  * Performs site object fulfillment for a single site at Pantheon, called by fillSites - Resolves #8
  * @param siteName

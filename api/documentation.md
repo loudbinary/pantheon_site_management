@@ -17,6 +17,9 @@
 <dt><a href="#ensureSetup">ensureSetup()</a></dt>
 <dd><p>Ensure that a PANTHEON_MACHINE_TOKEN environment variable available to application</p>
 </dd>
+<dt><a href="#populateJobFields">populateJobFields(queryResults)</a></dt>
+<dd><p>Populate needed metadata items on to query results from Pantheon for sites.</p>
+</dd>
 <dt><a href="#newFillSite">newFillSite(siteName)</a></dt>
 <dd><p>Performs site object fulfillment for a single site at Pantheon, called by fillSites - Resolves #8</p>
 </dd>
@@ -129,6 +132,17 @@ Private function to write site JSON Object to File Db Storage
 Ensure that a PANTHEON_MACHINE_TOKEN environment variable available to application
 
 **Kind**: global function  
+<a name="populateJobFields"></a>
+
+## populateJobFields(queryResults)
+Populate needed metadata items on to query results from Pantheon for sites.
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| queryResults | 
+
 <a name="newFillSite"></a>
 
 ## newFillSite(siteName)
