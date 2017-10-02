@@ -1,6 +1,6 @@
 {
   "name": "pantheon_site_management",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "CLI Utility to aide in management of Pantheon organizations",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
