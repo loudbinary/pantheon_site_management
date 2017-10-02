@@ -45,8 +45,14 @@ Pantheon.sites.fill = function(){
     return new Promise((resolve)=>{
         ensureSetup();
         if (_.isNil(App.ArgumentsProcessor.args.loadFileDb)){
-            fillSites()
-                .then((sites)=>{
+            // Converts --siteName to an array, for any string seperated by a ,
+            let sitesForProcessing = _.each(App.ArgumentsProcessor.args.siteName.split([',']),(site)=>{
+                return site.trim();
+            })
+
+            // Keep original behavior, prior to implementation of #8
+            if (sitesForProcessing.length =1){
+                fillSites().then((sites)=>{
                     let _sites = sites;
                     let results = _.forEach(_sites,(site)=>{
                         site.upstreamOutdated = '';
@@ -55,6 +61,17 @@ Pantheon.sites.fill = function(){
                     })
                     resolve(null);
                 })
+            }/** This logic branch is for new processing details in support of #8 */
+            else {
+                App.Utils.Log.msg(['Filling details for', sitesForProcessing.length,'requested sites']);
+
+                do {
+                    App.Utils.Log.msg(['......Processing #', count]);
+                    count++
+                } while(count != sitesForProcessing.length);
+                App.Utils.Log.msg('Completed proces querying Pantheon for site details');
+            }
+
         }
         else {
             App.Pantheon.sites.all = App.Db.get.sites();
