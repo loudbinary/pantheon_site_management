@@ -28,6 +28,7 @@ function buildHtml(data) {
     let dataString = _.map(data,(item)=>{
         return JSON.stringify(item);
     })
+
     return `<!DOCTYPE html>
         <html>
         <head>
@@ -62,7 +63,6 @@ function getObjects(obj) {
     let results = [];
     _.each(Object.values(obj), (val, idx) => {
         if (typeof val === 'object') {
-            console.log(idx);
             let key = Object.entries(obj)[idx][0];
             let newItem = {
                 key: key,
@@ -116,7 +116,7 @@ let buildTree = function buildTree(objs) {
             }
         })
         let nestedObjects = getObjects(obj);
-        let treeNode = newTreeNode(obj.name + ' - ' + obj.upstreamUpdates[0].length + " available", index);
+        let treeNode = newTreeNode(obj.name + ' - ' + obj.upstreamUpdates[0].length + " update(s) available - Service Level: " +obj.service_level, index);
         _.each(properties,(prop,index)=>{
             treeNode.children.push(generateChildNode(prop,index,obj[prop]));
         })
@@ -191,5 +191,5 @@ let buildTree = function buildTree(objs) {
 module.exports.generateHtml = function generateHtml(data){
     var treeData = buildTree(data);
     let html = buildHtml(treeData);
-    console.log(html)
+    return html;
 }
