@@ -19,12 +19,16 @@ function scanForPatches(){
                 App.Pantheon.sites.checkUpstreamStatus();
             })
             .then(()=>{
-                let outdated = _.map(App.Pantheon.sites.all,(site)=>{
-                    if (!_.isNil(site) && site.upstreamOutdated === 'outdated') {
-                        App.Pantheon.sites.all.pop(site);
-                        return site;
+                let outdated = []
+                    _.each(App.Pantheon.sites.all,(site)=>{
+                    if (!_.isNil(site) && site.upstreamOutdated == 'outdated') {
+                        outdated.push(site);
                     }
-                })
+                });
+                // We have to remove outdated items from Global array of sites, because
+                // they will be getting added back into array as upstreamUpdates found
+                // Are appended into new object.
+                App.Pantheon.sites.all = _.difference(App.Pantheon.sites.all,outdated);
                 return _.compact(outdated);
             })
             .then((outdated)=>{

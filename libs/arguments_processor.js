@@ -4,6 +4,8 @@ const json2md = require('json2md');
 const fs = require('fs-extra');
 const path = require('path');
 const pdf = require('html-pdf');
+const htmlReportingDirectory = path.join(process.cwd(),'reports','html_report');
+const exec = require('execa');
 
 ArgumentsProcessor = {
     args: yargs,
@@ -99,20 +101,21 @@ function processReportOutdatedHtml(emitPdf){
  */
 function saveHtmlResults(html){
     let templateDir = path.join(path.resolve(__dirname,'reports','html_template'));
-    let reportingDir = path.join(process.cwd(),'reports','html_report');
-    App.Utils.Log.msg(['Saving html report to ', reportingDir],true);
-    fs.copySync(templateDir,reportingDir);
-    fs.outputFileSync(path.join(reportingDir,'index.html'),html);
+
+    App.Utils.Log.msg(['Saving html report to ', htmlReportingDirectory],true);
+    fs.copySync(templateDir,htmlReportingDirectory);
+    fs.outputFileSync(path.join(htmlReportingDirectory,'index.html'),html);
     App.Utils.Log.msg([' - COMPLETED']);
 }
 
-function savePdfResults(html) {
+function savePdfResults(html,htmlPath) {
     let reportingDir = path.join(process.cwd(),'reports','pdf_report');
     App.Utils.Log.msg(['Producing pdf report to ', reportingDir],true);
     fs.emptyDirSync(reportingDir);
-    pdf.create(html).toFile(path.join(reportingDir,'report.pdf'),function(err, res){
-        App.Utils.Log.msg([' - COMPLETED']);
-    });
+    let options =  {"base": "file://" + htmlReportingDirectory};
+    var html = fs.readFileSync(path.join(htmlReportingDirectory,'index.html'), 'utf8');
+    exec.sync('html-pdf',[path.join(htmlReportingDirectory,'index.html'), path.join(reportingDir,'upstream_report.pdf')])
+    App.Utils.Log.msg([' - COMPLETED']);
 
 }
 module.exports = ArgumentsProcessor;

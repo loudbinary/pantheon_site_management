@@ -5,6 +5,7 @@
 * PANTHEON_MACHINE_TOKEN - [How-to Obtain Machine Token](https://pantheon.io/docs/machine-tokens/)
 
 *Installation:*<p>
+```npm install html-pdf -g```
 ```npm install pantheon_site_management -g```
 
 *Arguments:*<p>
