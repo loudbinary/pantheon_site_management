@@ -13,6 +13,13 @@ function newTreeNode(name,index){
     }
 }
 
+/**
+ * Represents a nested node within jqtree object/plugin.
+ * @param value
+ * @param key
+ * @param index
+ * @return {{name: string, id: *}}
+ */
 function newChildNode(value,key,index) {
     return {
         name: `${key} - ${value}`, id: index
@@ -32,8 +39,8 @@ function buildHtml(data) {
     return `<!DOCTYPE html>
         <html>
         <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="js/jquery.min.js"></script>
         <script src="js/tree.jquery.js"></script>
         <link rel="stylesheet" href="css/jqtree.css">
         <script>
@@ -154,55 +161,6 @@ let buildTree = function buildTree(objs) {
     })
     return results;
 }
-
-/*
-    let treeNodes = []
-    _.each(obj,(item,key,index) =>{
-        let results = createMarkdown(key,item)
-        topLevelMarkdown.push(results);
-    })
-    topLevelMarkdown = _.compact(topLevelMarkdown);
-    let topMd = [
-        {h1: obj.name},
-        {ul: topLevelMarkdown}
-    ]
-    if(allObj.length >> 0) {
-        let nestedResults = []
-
-        _.each(allObj,(item)=>{
-
-            let itemLevelMd = [
-                {h2: item.key }
-            ]
-            //Record object name into markdown
-            //nestedResults.push(itemLevelMd);
-            topMd[1].ul.push(itemLevelMd);
-            // Get each property as details and append ul into off object for Markdown conversion.
-            _.each(item.value,(newItem,newKey)=>{
-                let key = function (count){
-                    return Object.entries(newItem)[count][0];
-                }
-                let value = function (count){
-                    return Object.entries(newItem)[count][1];
-                }
-                let subMd = [
-                    {h4: "Item Details : " + String(newKey)}
-                ]
-                topMd[1].ul.push(subMd);
-                let count = 0;
-                do {
-                    let subMarkdown = createMarkdown(key(count),value(count));
-                    topMd[1].ul.push(subMarkdown);
-                    count++
-                } while (count != Object.entries(newItem).length)
-                //nestedResults.push(subMd);
-            })
-            //topMd[1].ul.push(nestedResults);
-        })
-        // Returns extracted md array, and any remaining objects to be parsed for mark down.
-        return topMd;
-    }
-*/
 
 module.exports.generateHtml = function generateHtml(data){
     var treeData = buildTree(data);
