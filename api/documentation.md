@@ -8,6 +8,9 @@
 ## Functions
 
 <dl>
+<dt><a href="#saveHtmlResults">saveHtmlResults(html)</a></dt>
+<dd><p>Saves html report to cwd reports/html_reporty directory</p>
+</dd>
 <dt><a href="#filterUpstreams">filterUpstreams(site)</a> ⇒ <code>Object</code></dt>
 <dd><p>Filter all upstreamOutdated == &#39;outdated&#39; items within App.Pantheon.sites.all[]</p>
 </dd>
@@ -101,6 +104,17 @@ Fills upstreamUpdates array with all missing upstream updates found by terminus 
 | Param | Description |
 | --- | --- |
 | outdated | Array filled with all sites matching upstreamOutdated === 'outdated' |
+
+<a name="saveHtmlResults"></a>
+
+## saveHtmlResults(html)
+Saves html report to cwd reports/html_reporty directory
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| html | 
 
 <a name="filterUpstreams"></a>
 
